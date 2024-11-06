@@ -1,28 +1,37 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button/index";
-import { GoogleMap } from "../../components/GoogleMap";
+import { GoogleMap, GoogleMapPin } from "../../components/GoogleMap";
 import { locatePosition } from "../../lib/utils";
-import { defaultCenter } from "../../constants";
+import { defaultCenter, defaultZoom } from "../../constants";
 
 import LocateMe from "../../assets/my-location-svgrepo-com.svg?react";
 import Add from "../../assets/plus-svgrepo-com.svg?react";
+import { useMap } from "@vis.gl/react-google-maps";
 
 export type Position = { lat: number; lng: number };
 
 export function Home() {
   const [center, setCenter] = useState(defaultCenter);
-
+  const map = useMap();
+  console.log({ map });
   const navigate = useNavigate();
+  const pinToCenter = useCallback(
+    (center: Position) => {
+      map?.panTo(center);
+      setCenter(center);
+    },
+    [map]
+  );
 
   useEffect(() => {
-    locatePosition(setCenter);
-    console.log("EFFECT ")
-  }, []);
+    locatePosition(pinToCenter);
+    console.log("EFFECT ");
+  }, [pinToCenter]);
 
   const handleLocateMe = () => {
-    locatePosition(setCenter);
+    locatePosition(pinToCenter);
   };
 
   // const handlePreviewLocation preview location by UUID
@@ -37,7 +46,16 @@ export function Home() {
 
   return (
     <>
-      <GoogleMap center={center} />
+      <GoogleMap
+        // onDrag={(ev) => {
+        //   const center = ev.map.getCenter()?.toJSON();
+        //   if (center) setCenter(center);
+        // }}
+        defaultZoom={defaultZoom}
+        defaultCenter={defaultCenter}
+      >
+        <GoogleMapPin position={center} />
+      </GoogleMap>
       <div className="controls">
         <Button
           title="Add location"

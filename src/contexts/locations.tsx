@@ -1,14 +1,11 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-} from "react";
+import { createContext, Dispatch, SetStateAction, useContext } from "react";
 import { Position } from "../pages/Home";
 
 export const locationsContext = createContext<{
-  locations: { [key: string]: Position }[];
-  setLocations: Dispatch<SetStateAction<{ [key: string]: Position }[]>>;
+  locations: { id: string; coords: Position; image_url?: string }[];
+  setLocations: Dispatch<
+    SetStateAction<{ id: string; coords: Position; image_url?: string }[]>
+  >;
 }>({ locations: [], setLocations: () => {} });
 
 export function useLocationsContext() {

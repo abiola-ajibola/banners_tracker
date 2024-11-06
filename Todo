@@ -1,0 +1,5 @@
+- Make the edit location page to modify an existing location and not create a new one
+- Integrate AWS serverless for uploading and storing images per location
+- Integrate AWS serverless for CRUD operations per location
+- Save data to cloud on clicking save
+- Implement email verification

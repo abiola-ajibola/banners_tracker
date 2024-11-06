@@ -57,8 +57,16 @@ export function AddedLocations() {
     console.log({ delete: id });
   };
   return locations.map((location) => {
-    const [[id, coord]] = Object.entries(location);
-    console.log({ id, coord });
-    return <LocationCard key={id} id={id} coords={coord} onDelete={handleDelete} />;
+    const { id, coords, image_url } = location;
+    console.log({ id, coords });
+    return (
+      <LocationCard
+        key={id}
+        id={id}
+        coords={coords}
+        imageUrl={image_url}
+        onDelete={handleDelete}
+      />
+    );
   });
 }
