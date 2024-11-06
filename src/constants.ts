@@ -1,0 +1,1 @@
+export const defaultCenter = { lat: 6.45407, lng: 3.39467 };
