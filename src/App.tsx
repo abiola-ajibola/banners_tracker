@@ -8,8 +8,9 @@ import { Nav } from "./components/Nav";
 import { AddedLocations } from "./pages/Locations";
 import { UserDataProvider } from "./contexts/userData.Provider";
 import { Email } from "./pages/Email";
-import { VerifyEmail } from "./pages/VerifyEmail";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import { VerifyEmail } from "./pages/VerifyEmail";
+import { Toaster } from "./components/Toast";
 
 const { VITE_GOOGLE_MAPS_API_KEY } = import.meta.env;
 
@@ -20,10 +21,14 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       {
-        path: "/email",
+        path: "/verify_message",
+        element: <VerifyEmail />,
+      },
+      {
+        path: "/auth/email",
         element: <Email />,
       },
-      { path: "/email/otp", element: <VerifyEmail /> },
+      { path: "/auth/token_expired", element: <Email expired /> },
       {
         path: "/location",
         element: <AddLocation />,
@@ -47,6 +52,7 @@ function App() {
       >
 
         <RouterProvider router={router} />
+        <Toaster />
       </APIProvider>
       </UserDataProvider>
     </LocationsProvider>

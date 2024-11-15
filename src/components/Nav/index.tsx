@@ -35,8 +35,8 @@ export function Nav() {
       </nav>
       <Outlet />
       <footer>
-        {location.pathname !== "/email" && (
-          <Link to="/email" className={buttonVariants() + " mt-12"}>
+        {location.pathname !== "auth/email" && (
+          <Link to="auth/email" className={buttonVariants() + " mt-12"}>
             Change email
           </Link>
         )}
