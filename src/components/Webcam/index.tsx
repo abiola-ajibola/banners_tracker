@@ -11,7 +11,7 @@ export function Webcam({
   const webcamRef: MutableRefObject<Cam | undefined> = useRef();
 
   const capture = useCallback(() => {
-    const imageSrc = webcamRef.current?.getScreenshot();
+    const imageSrc = webcamRef.current?.getScreenshot({width: 300, height: 225});
     onCapture(imageSrc);
   }, [onCapture]);
 
@@ -24,6 +24,7 @@ export function Webcam({
         onUserMediaError={console.error}
         screenshotFormat="image/png"
         capture="environment"
+        screenshotQuality={0.5}
       />
       <Button className="mt-4" onClick={capture}>
         <span>Capture photo</span> {<CameraIcon />}
