@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:watch": "tsc -b && vite build --mode development",
+    "build:all": "yarn build && yarn --cwd ./server build",
+    "start:server": "yarn --cwd ./server start",
     "lint": "eslint .",
     "preview": "vite preview"
   },
