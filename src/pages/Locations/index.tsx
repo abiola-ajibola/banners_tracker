@@ -7,9 +7,9 @@ import {
 } from "../../components/Card";
 import EditIcon from "../../assets/edit-svgrepo-com.svg?react";
 import DeleteIcon from "../../assets/delete-1487-svgrepo-com.svg?react";
-import { Position } from "../Home";
 import { buttonVariants } from "../../components/Button/variants";
 import { useLocationsContext } from "../../contexts/locations";
+import { Position } from "../../types";
 
 function LocationCard({
   street,
@@ -57,12 +57,12 @@ export function AddedLocations() {
     console.log({ delete: id });
   };
   return locations.map((location) => {
-    const { id, coords, image_url } = location;
+    const { _id: id, coords, image_url } = location;
     console.log({ id, coords });
     return (
       <LocationCard
         key={id}
-        id={id}
+        id={id || ""}
         coords={coords}
         imageUrl={image_url}
         onDelete={handleDelete}
