@@ -9,8 +9,7 @@ import { defaultCenter, defaultZoom } from "../../constants";
 import LocateMe from "../../assets/my-location-svgrepo-com.svg?react";
 import Add from "../../assets/plus-svgrepo-com.svg?react";
 import { useMap } from "@vis.gl/react-google-maps";
-
-export type Position = { lat: number; lng: number };
+import { Position } from "../../types";
 
 export function Home() {
   const [center, setCenter] = useState(defaultCenter);
@@ -39,7 +38,7 @@ export function Home() {
   const handleAddNewLocation = () => {
     const setNewPosition = (position: Position) => {
       setCenter(position);
-      navigate("/location", { viewTransition: true });
+      navigate("/location");
     };
     locatePosition(setNewPosition);
   };
