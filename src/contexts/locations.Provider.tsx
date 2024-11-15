@@ -1,9 +1,9 @@
 import { PropsWithChildren, useState } from "react";
-import { Position } from "../pages/Home";
 import { locationsContext } from "./locations";
+import { MapLocation } from "../types";
 
 export function LocationsProvider({ children }: PropsWithChildren) {
-  const [locations, setLocations] = useState<{ [key: string]: Position }[]>([]);
+  const [locations, setLocations] = useState<MapLocation[]>([]);
 
   return (
     <locationsContext.Provider value={{ locations: locations, setLocations }}>
