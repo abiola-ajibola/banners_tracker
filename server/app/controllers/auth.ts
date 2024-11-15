@@ -39,7 +39,6 @@ export async function verifyEmail(req: Request, res: Response) {
           .send(ReasonPhrases.INTERNAL_SERVER_ERROR);
       });
     const auth_token = sign({ _id: user._id, email: user.email }, JWT_SECRET);
-    // console.log(auth_token);
     res
       .cookie("authorization", auth_token, {
         httpOnly: process.env.NODE_ENV == "production",
