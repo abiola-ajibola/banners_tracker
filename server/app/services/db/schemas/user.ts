@@ -6,20 +6,23 @@ export interface IUser {
   verified?: boolean;
 }
 
-const userSchema = new Schema<IUser>({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = new Schema<IUser>(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    role: {
+      type: String,
+      default: "client",
+    },
   },
-  verified: {
-    type: Boolean,
-    default: false,
-  },
-  role: {
-    type: String,
-    default: "client",
-  },
-});
+  { timestamps: true }
+);
 
 export const User = model<IUser>("User", userSchema);

@@ -7,19 +7,22 @@ export type TMapLocation = {
   email: string;
 };
 
-const locationSchema = new Schema<TMapLocation>({
-  email: {
-    type: String,
-    required: true,
+const locationSchema = new Schema<TMapLocation>(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    coords: {
+      lat: Number,
+      lng: Number,
+    },
+    image_url: {
+      type: String,
+      required: true,
+    },
   },
-  coords: {
-    lat: Number,
-    lng: Number,
-  },
-  image_url: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 export const MapLocation = model<TMapLocation>("MapLocation", locationSchema);
