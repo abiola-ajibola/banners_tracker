@@ -6,8 +6,8 @@ class LocationService extends Service<TMapLocation> {
     super(_Model);
   }
 
-  async findByEmail(email: string) {
-    return await this._model.findOne({ email });
+  findByEmail(email: string) {
+    return this._model.find({ email }).select("-email");
   }
 }
 
