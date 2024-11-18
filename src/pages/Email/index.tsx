@@ -30,7 +30,6 @@ export function Email(props: { expired?: boolean }) {
       verified: false,
     }));
     setEmailValid(e.target.validity.valid);
-    // send email to backend for verification
   };
 
   async function handleSubmit(
@@ -45,14 +44,14 @@ export function Email(props: { expired?: boolean }) {
           }
         : { email: data.email }
     );
-    if (status === 200 && !user.verified) {
-      setData(user);
+    if (status === 204) {
+      // setData(user);
       navigate("/verify_message");
       return;
     }
     if (status === 200) {
-      setData(user);
-      navigate("/");
+      setData((state) => ({ ...state, email: user.email as string }));
+      navigate("/otp");
     }
 
     return;

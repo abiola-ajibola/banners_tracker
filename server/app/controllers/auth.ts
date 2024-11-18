@@ -1,9 +1,10 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
-import { userService } from "../services/db/models";
-import { sendVerificationMail } from "../services/email";
+import { OTPService, userService } from "../services/db/models";
+import { sendOTP, sendVerificationMail } from "../services/email";
 import { AUTH_COOKIE_NAME } from "../constants";
+import { generateOTP } from "../lib";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 console.log({ p: process.env.NODE_ENV });
@@ -43,6 +44,7 @@ export async function verifyEmail(req: Request, res: Response) {
     res
       .cookie(AUTH_COOKIE_NAME, auth_token, {
         httpOnly: process.env.NODE_ENV == "production",
+        secure: process.env.NODE_ENV == "production",
       })
       .redirect("/");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,6 +57,46 @@ export async function verifyEmail(req: Request, res: Response) {
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: err?.message.replace("jwt", "token") });
     return;
+  }
+}
+
+export async function verifyOTP(req: Request, res: Response) {
+  if (!JWT_SECRET) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+    return;
+  }
+  const { otp, email } = req.body;
+  const data = await OTPService.getOne({ email });
+  if (!data) {
+    res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ message: ReasonPhrases.NOT_FOUND });
+    return;
+  }
+  if (otp !== data.value) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "Incorrect OTP" });
+    return;
+  }
+  if (otp === data.value) {
+    const result = await OTPService.deleteOne(data._id);
+    const user = await userService.getOne({ email });
+    if (!user) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+      return;
+    }
+    const auth_token = sign({ _id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    console.log({ auth_token, data, result });
+    res
+      .cookie(AUTH_COOKIE_NAME, auth_token, {
+        httpOnly: process.env.NODE_ENV == "production",
+        secure: process.env.NODE_ENV == "production",
+      })
+      .status(StatusCodes.OK)
+      .json(user);
   }
 }
 
@@ -74,16 +116,36 @@ export async function authenticate(req: Request, res: Response): Promise<void> {
     }
 
     if (user.verified) {
-      console.log("verified")
-      const auth_token = sign({ _id: user._id, email: user.email }, JWT_SECRET);
-      console.log({ auth_token });
-      res
-        .cookie(AUTH_COOKIE_NAME, auth_token, {
-          httpOnly: process.env.NODE_ENV == "production",
-        })
-        .status(StatusCodes.OK)
-        .json(user);
-      return;
+      try {
+        console.log("verified");
+
+        const otp = generateOTP();
+        console.log({ otp });
+        const otpDoc = await OTPService.getOne({ email: user.email });
+        if (otpDoc) {
+          const result = await OTPService.updateOneById(otpDoc._id, {
+            value: otp,
+          });
+          if (result) {
+            sendOTP(user.email, otp);
+            res.status(StatusCodes.OK).json({ email: user.email });
+            return
+          }
+        }
+        const result = await OTPService.insertOne({
+          email: user.email,
+          value: otp,
+        });
+        sendOTP(user.email, result.value);
+        res.status(StatusCodes.OK).json({ email: user.email });
+        return;
+      } catch (e) {
+        console.log({ e });
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+        return;
+      }
     }
 
     if (req.body.reset) {
@@ -92,7 +154,7 @@ export async function authenticate(req: Request, res: Response): Promise<void> {
         const token = sign(data.toObject(), JWT_SECRET, { expiresIn: "1h" });
         await sendVerificationMail(data.email, token);
         console.log({ up: data });
-        res.status(StatusCodes.OK).json(data);
+        res.status(StatusCodes.NO_CONTENT);
         return;
       } else throw "Update failed";
     }

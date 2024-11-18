@@ -60,8 +60,8 @@ export class Service<U> /* implements IService<U> */ {
     return this._model.findOne(filter).exec();
   }
 
-  deleteOne(id: string) {
-    return this._model.deleteOne({ id });
+  deleteOne(_id: Types.ObjectId) {
+    return this._model.deleteOne({ _id }).exec();
   }
 
   insertOne(data: U) {

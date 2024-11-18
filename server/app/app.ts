@@ -2,8 +2,12 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import { db } from "./services/db/index";
-import { validateAuth, validateLocation } from "./middlewares/validation";
-import { authenticate, verifyEmail } from "./controllers/auth";
+import {
+  validateAuth,
+  validateLocation,
+  validateOtp,
+} from "./middlewares/validation";
+import { authenticate, verifyEmail, verifyOTP } from "./controllers/auth";
 import { getUser } from "./controllers/user";
 import { getLocations, updateLocation } from "./controllers/location";
 
@@ -37,6 +41,7 @@ console.log({ cwd: process.cwd() });
 app.get("/me", getUser);
 app.post("/auth", validateAuth, authenticate);
 app.get("/auth/verify/:token", verifyEmail);
+app.post("/auth/login/verify", validateOtp, verifyOTP);
 app.put("/banner-location", validateLocation, updateLocation);
 app.get("/banner-locations", getLocations);
 

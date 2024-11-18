@@ -6,7 +6,7 @@ const api = axios.create({
 });
 
 export async function auth(payload: { email: string; reset?: boolean }) {
-  const { data, status } = await api.post<IUser>("/auth", payload);
+  const { data, status } = await api.post<{ email?: string }>("/auth", payload);
   return { data, status };
 }
 
@@ -27,5 +27,19 @@ export async function getLocations() {
   const { data, status } = await api.get<(MapLocation & { email: string })[]>(
     "/banner-locations"
   );
+  return { data, status };
+}
+
+export async function verifyOTP({
+  email,
+  otp,
+}: {
+  email: string;
+  otp: string;
+}) {
+  const { data, status } = await api.post<IUser | undefined>("/auth/login/verify", {
+    email,
+    otp,
+  });
   return { data, status };
 }

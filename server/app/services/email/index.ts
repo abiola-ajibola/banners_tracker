@@ -30,3 +30,12 @@ export async function sendVerificationMail(receiver: string, token: string) {
   const template = `Please click this link to verify your email for tracking banners ${BASE_URL}/auth/verify/${token}`;
   await sendEmail(receiver, "Verify You Email", template);
 }
+
+export async function sendOTP(receiver: string, otp: string) {
+  const tepmlate = `<h2>Please use this OTP to confirm login to the app:</h2>
+  <br />
+  <br />
+  <h1 style="text-align: center;">${otp}</h2>
+  `;
+  await sendEmail(receiver, `Login OTP`, tepmlate);
+}

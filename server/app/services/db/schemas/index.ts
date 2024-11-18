@@ -14,4 +14,5 @@ export type TModel<T> = Model<
 >;
 
 export { User, IUser } from "./user";
-export {TMapLocation, TPosition, MapLocation} from "./location"
+export { TMapLocation, TPosition, MapLocation } from "./location";
+export { OTP, IOTP } from "./otp";

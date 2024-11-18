@@ -11,6 +11,7 @@ import { Email } from "./pages/Email";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Toaster } from "./components/Toast";
+import { ConfirmLogin } from "./pages/ConfirmLogin";
 
 const { VITE_GOOGLE_MAPS_API_KEY } = import.meta.env;
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/verify_message",
         element: <VerifyEmail />,
+      },
+      {
+        path: "/otp",
+        element: <ConfirmLogin />,
       },
       {
         path: "/auth/email",
@@ -46,14 +51,13 @@ function App() {
   return (
     <LocationsProvider>
       <UserDataProvider>
-      <APIProvider
-        apiKey={VITE_GOOGLE_MAPS_API_KEY}
-        onLoad={() => console.log("Map Loaded")}
-      >
-
-        <RouterProvider router={router} />
-        <Toaster />
-      </APIProvider>
+        <APIProvider
+          apiKey={VITE_GOOGLE_MAPS_API_KEY}
+          onLoad={() => console.log("Map Loaded")}
+        >
+          <RouterProvider router={router} />
+          <Toaster />
+        </APIProvider>
       </UserDataProvider>
     </LocationsProvider>
   );
