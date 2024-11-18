@@ -22,3 +22,10 @@ export async function saveLocation(location: MapLocation & { email: string }) {
   );
   return { data, status };
 }
+
+export async function getLocations() {
+  const { data, status } = await api.get<(MapLocation & { email: string })[]>(
+    "/banner-locations"
+  );
+  return { data, status };
+}

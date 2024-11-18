@@ -1,11 +1,11 @@
 import express from "express";
 import path from "path";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 import { db } from "./services/db/index";
 import { validateAuth, validateLocation } from "./middlewares/validation";
 import { authenticate, verifyEmail } from "./controllers/auth";
 import { getUser } from "./controllers/user";
-import { updateLocation } from "./controllers/location";
+import { getLocations, updateLocation } from "./controllers/location";
 
 const app = express();
 
@@ -29,15 +29,16 @@ const staticOptions = {
 };
 
 app.use(express.static("../../dist", staticOptions));
-app.use(express.json({limit: "1mb"}));
-app.use(cookieParser())
+app.use(express.json({ limit: "1mb" }));
+app.use(cookieParser());
 
 console.log({ cwd: process.cwd() });
 
-app.get("/me", getUser)
+app.get("/me", getUser);
 app.post("/auth", validateAuth, authenticate);
 app.get("/auth/verify/:token", verifyEmail);
-app.put("/banner-location",validateLocation, updateLocation);
+app.put("/banner-location", validateLocation, updateLocation);
+app.get("/banner-locations", getLocations);
 
 app.get("/*", (req, res) => {
   console.log(req.url);

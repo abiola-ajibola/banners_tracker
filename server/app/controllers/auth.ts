@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { userService } from "../services/db/models";
 import { sendVerificationMail } from "../services/email";
+import { AUTH_COOKIE_NAME } from "../constants";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 console.log({ p: process.env.NODE_ENV });
@@ -40,7 +41,7 @@ export async function verifyEmail(req: Request, res: Response) {
       });
     const auth_token = sign({ _id: user._id, email: user.email }, JWT_SECRET);
     res
-      .cookie("authorization", auth_token, {
+      .cookie(AUTH_COOKIE_NAME, auth_token, {
         httpOnly: process.env.NODE_ENV == "production",
       })
       .redirect("/");
@@ -77,7 +78,7 @@ export async function authenticate(req: Request, res: Response): Promise<void> {
       const auth_token = sign({ _id: user._id, email: user.email }, JWT_SECRET);
       console.log({ auth_token });
       res
-        .cookie("authorization", auth_token, {
+        .cookie(AUTH_COOKIE_NAME, auth_token, {
           httpOnly: process.env.NODE_ENV == "production",
         })
         .status(StatusCodes.OK)
