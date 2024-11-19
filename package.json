@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "build:dirty": "vite build",
     "build:watch": "tsc -b && vite build --watch --mode development",
-    "build:all": "yarn build:dirty && yarn --cwd ./server build",
+    "build:all": "yarn build && yarn --cwd ./server build",
     "start:server": "yarn --cwd ./server start",
     "lint": "eslint .",
     "preview": "vite preview"
