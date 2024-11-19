@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IUser, MapLocation } from "../types";
+import { IGeoCode, IUser, MapLocation, Position } from "../types";
 
 const api = axios.create({
   baseURL: "/",
@@ -37,9 +37,19 @@ export async function verifyOTP({
   email: string;
   otp: string;
 }) {
-  const { data, status } = await api.post<IUser | undefined>("/auth/login/verify", {
-    email,
-    otp,
-  });
+  const { data, status } = await api.post<IUser | undefined>(
+    "/auth/login/verify",
+    {
+      email,
+      otp,
+    }
+  );
+  return { data, status };
+}
+
+export async function reverseGeo(point: Position) {
+  const { data, status } = await api.get<IGeoCode>(
+    `/geolocation?lat=${point.lat}&lng=${point.lng}`
+  );
   return { data, status };
 }

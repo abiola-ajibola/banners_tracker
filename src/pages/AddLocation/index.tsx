@@ -15,7 +15,7 @@ import { useMap } from "@vis.gl/react-google-maps";
 import { useParams } from "react-router-dom";
 import { Position } from "../../types";
 import { useUserDataContext } from "../../contexts/userData";
-import { saveLocation } from "../../lib/api";
+import { reverseGeo, saveLocation } from "../../lib/api";
 import { useToast } from "../../hooks/useToast";
 
 export function AddLocation() {
@@ -27,6 +27,9 @@ export function AddLocation() {
   const map = useMap();
   const { data: user } = useUserDataContext();
   const { toast } = useToast();
+
+  console.log({ map });
+  // const geocoder =
 
   const panSetPosition = useCallback(
     (position: Position) => {
@@ -70,6 +73,8 @@ export function AddLocation() {
       });
       return;
     }
+    const { data: geoData, status: geoDataStatus } = await reverseGeo(center);
+    console.log({ geoData, geoDataStatus });
     const { data, status } = await saveLocation(
       params.id
         ? {
@@ -77,11 +82,13 @@ export function AddLocation() {
             coords: center,
             image_url: imageSrc,
             email: user.email,
+            address: geoData.results[0]?.formatted_address || "",
           }
         : {
             coords: center,
             image_url: imageSrc,
             email: user.email,
+            address: geoData.results[0]?.formatted_address || "",
           }
     );
 
@@ -89,7 +96,12 @@ export function AddLocation() {
       const newLocations = params.id
         ? locations.map((loc) =>
             loc._id === params.id
-              ? { _id: params.id, coords: center, image_url: imageSrc }
+              ? {
+                  _id: params.id,
+                  coords: center,
+                  image_url: imageSrc,
+                  address: geoData.results[0]?.formatted_address,
+                }
               : loc
           )
         : [
@@ -97,33 +109,10 @@ export function AddLocation() {
             { _id: data._id, coords: center, image_url: imageSrc },
           ];
       setLocations(newLocations);
+      toast({
+        description: "Location Saved",
+      });
     }
-    // When image is not a base64 url, there's no need to convert it into a blob for uploading, we can just save url as is.
-    // commented because, images will now be stored in the DB as base64 data urls
-    // if (imageSrc.includes("data")) {
-    //   const [typeData, imgData] = imageSrc.split(",");
-    //   const datatype = typeData.split(";")[0].slice(5);
-    //   const binData = atob(imgData)
-    //     .split("")
-    //     .map((char) => char.charCodeAt(0));
-    //   const blob = new Blob([new Uint8Array(binData).buffer], {
-    //     type: datatype,
-    //   });
-    //   console.log({ blob });
-    // }
-
-    // In the db, location looks like this:
-    /*
-    Location {
-      id: string;
-      coords: {
-        lat: number;
-        lng: number;
-      };
-      email: string;
-      image_url: string;
-    }
-    */
   };
 
   return (

@@ -65,6 +65,7 @@ export function AddedLocations() {
         id={id || ""}
         coords={coords}
         imageUrl={image_url}
+        street={location.address}
         onDelete={handleDelete}
       />
     );

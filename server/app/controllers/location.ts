@@ -18,7 +18,7 @@ export async function updateLocation(req: Request, res: Response) {
   }
   if (body._id) {
     const data = await locationService.updateOneById(body._id, body);
-    console.log({ data });
+    console.log({ data, body });
     res.status(StatusCodes.OK).json(body);
     return;
   }
