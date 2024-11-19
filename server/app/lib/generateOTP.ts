@@ -5,7 +5,3 @@ export function generateOTP(length = 6) {
   }
   return output;
 }
-
-for (let index = 0; index < 10; index++) {
-  console.log({ otp: generateOTP() });
-}
