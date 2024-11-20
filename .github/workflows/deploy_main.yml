@@ -16,7 +16,9 @@ jobs:
           key: ${{secrets.KEY}}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-              echo $PROJECT_ROOT
-              cd ${{ vars.PROJECT_ROOT }}/.github/workflows/scripts
+              cd ${{ vars.PROJECT_ROOT }}
+              git pull
+              ls
+              cd .github/workflows/scripts
               ls
               deploy.sh
