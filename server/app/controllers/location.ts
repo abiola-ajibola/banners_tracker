@@ -59,7 +59,7 @@ export async function getLocations(req: Request, res: Response) {
           .json({ message: ReasonPhrases.BAD_REQUEST });
       }
       if (decoded) {
-        console.log({ decoded });
+        console.log({ decoded_: decoded });
         const locations = await locationService.findByEmail(
           decoded.payload.email
         );
