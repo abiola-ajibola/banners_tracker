@@ -1,4 +1,4 @@
-- name: Deploy mani branch
+            - name: Deploy mani branch
   on:
     push:
       branches:
