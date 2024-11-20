@@ -1,4 +1,5 @@
-cd ~/projects/banners_tracker
+echo $PROJECT_ROOT
+cd $PROJECT_ROOT
 git pull
 tmux new-session -A -s banners_tracker
 # install dependencies for frontend and backend
