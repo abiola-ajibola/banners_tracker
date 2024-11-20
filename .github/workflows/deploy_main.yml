@@ -1,8 +1,8 @@
 - name: Deploy mani branch
   on:
-  push:
-    branches:
-      - main
+    push:
+      branches:
+        - main
 
   uses: appleboy/ssh-action@v1.2.0
   with:
