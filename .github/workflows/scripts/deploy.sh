@@ -1,3 +1,4 @@
+echo ${{ vars.PROJECT_ROOT }}
 echo $PROJECT_ROOT
 cd $PROJECT_ROOT
 git pull
