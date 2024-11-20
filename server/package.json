@@ -4,7 +4,7 @@
   "main": "build/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node build/app.js --env-file=.env.server.production",
+    "start": "node --env-file=.env.server.production build/app.js",
     "build": "tsc",
     "dev": "nodemon -e ts --watch app/ --exec 'tsc && node --env-file=.env.server build/app.js'"
   },
