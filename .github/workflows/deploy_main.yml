@@ -15,4 +15,6 @@ jobs:
           username: ${{secrets.USERNAME}}
           key: ${{secrets.KEY}}
           passphrase: ${{ secrets.PASSPHRASE }}
-          script: scripts/deploy.sh
+          script: |
+              ls
+              scripts/deploy.sh
