@@ -17,6 +17,6 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
               echo $PROJECT_ROOT
-              cd $PROJECT_ROOT/.github/workflows/scripts
+              cd ${{ vars.PROJECT_ROOT }}/.github/workflows/scripts
               ls
               deploy.sh
