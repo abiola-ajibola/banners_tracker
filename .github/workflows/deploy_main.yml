@@ -20,7 +20,5 @@ jobs:
               ssh-add ${{ vars.KEY_PATH }}
               cd ${{ vars.PROJECT_ROOT }}
               git pull
-              ls
-              cd .github/workflows/scripts
-              ls
-              deploy.sh
+              yarn build:ci
+              pm2 restart app
