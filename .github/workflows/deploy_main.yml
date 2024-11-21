@@ -20,5 +20,6 @@ jobs:
               ssh-add ${{ vars.KEY_PATH }}
               cd ${{ vars.PROJECT_ROOT }}
               git pull
+              echo $PATH
               yarn build:ci
               pm2 restart app
