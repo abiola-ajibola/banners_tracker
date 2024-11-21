@@ -23,7 +23,6 @@ jobs:
               if [ -d "$HOME/.nvm/versions/node/v22.11.0/bin" ] ; then
                   PATH="$HOME/.nvm/versions/node/v22.11.0/bin:$PATH"
               fi
-              echo $PATH
-              echo $HOME
+              corepack enable
               yarn build:ci
               pm2 restart app
