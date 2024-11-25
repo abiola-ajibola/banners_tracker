@@ -15,6 +15,26 @@ export async function getMe() {
   return { data, status };
 }
 
+export async function getUsers(
+  query: {
+    page: number;
+    perPage: number;
+  } = {
+    page: 1,
+    perPage: 10,
+  }
+) {
+  const { data, status } = await api.get<{
+    data: IUser[];
+    currentPage: number;
+    perPage: number;
+    total: number;
+  }>("/users", {
+    params: query,
+  });
+  return { data, status };
+}
+
 export async function saveLocation(location: MapLocation & { email: string }) {
   const { data, status } = await api.put<MapLocation & { email: string }>(
     "/banner-location",

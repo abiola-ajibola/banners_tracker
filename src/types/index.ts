@@ -54,3 +54,10 @@ export interface IGeoCode {
     types: ["street_address"];
   }[];
 }
+
+export type NavLinkProps = { text: string; href: string };
+
+export type NavProps = {
+  links: NavLinkProps[];
+  adminLinks: NavLinkProps[];
+};

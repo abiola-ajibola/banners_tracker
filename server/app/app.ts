@@ -6,6 +6,7 @@ import {
   validateAuth,
   validateLocation,
   validateOtp,
+  validateQuery,
 } from "./middlewares/validation";
 import {
   authenticate,
@@ -16,7 +17,9 @@ import {
   getUser,
   geolocation,
 } from "./controllers";
-import { isAuthorized } from "./middlewares/authorization";
+import { isAuthorized } from "./middlewares/authorization/";
+import { isAdmin } from "./middlewares/authorization/";
+import { getAllUsers } from "./controllers/user";
 
 const app = express();
 
@@ -49,6 +52,7 @@ app.get("/me", getUser);
 app.post("/auth", validateAuth, authenticate);
 app.put("/banner-location", isAuthorized, validateLocation, updateLocation);
 app.get("/banner-locations", isAuthorized, getLocations);
+app.get("/users", validateQuery, isAuthorized, isAdmin, getAllUsers);
 app.get("/geolocation", isAuthorized, geolocation);
 app.get("/auth/verify/:token", verifyEmail);
 app.post("/auth/login/verify", validateOtp, verifyOTP);

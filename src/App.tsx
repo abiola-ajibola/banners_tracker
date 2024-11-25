@@ -12,13 +12,19 @@ import { APIProvider } from "@vis.gl/react-google-maps";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Toaster } from "./components/Toast";
 import { ConfirmLogin } from "./pages/ConfirmLogin";
+import { AdminGuard } from "./components/AdminGuard";
+import { AdminHome } from "./pages/AdminHome";
+import { adminLinks, links } from "./lib/routes";
+import { AllUsers } from "./pages/AllUsers";
 
 const { VITE_GOOGLE_MAPS_API_KEY } = import.meta.env;
+
+
 
 const router = createBrowserRouter([
   {
     path: "",
-    element: <Nav />,
+    element: <Nav links={links} adminLinks={adminLinks} />,
     children: [
       { path: "/", element: <Home /> },
       {
@@ -30,19 +36,28 @@ const router = createBrowserRouter([
         element: <ConfirmLogin />,
       },
       {
-        path: "/auth/email",
-        element: <Email />,
+        path: "/locations",
+        element: <AddedLocations />,
       },
-      { path: "/auth/token_expired", element: <Email expired /> },
       {
         path: "/location",
         element: <AddLocation />,
       },
+      {
+        path: "/admin",
+        element: <AdminGuard />,
+        children: [
+          { path: "", element: <AdminHome links={adminLinks} /> },
+          { path: "all-users", element: <AllUsers /> },
+          { path: "all-locations", element: <h1>All Locations</h1> },
+        ],
+      },
       { path: "/location/:id", element: <AddLocation /> },
       {
-        path: "locations",
-        element: <AddedLocations />,
+        path: "/auth/email",
+        element: <Email />,
       },
+      { path: "/auth/token_expired", element: <Email expired /> },
     ],
   },
 ]);

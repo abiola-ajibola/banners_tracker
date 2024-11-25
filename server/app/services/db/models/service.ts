@@ -74,4 +74,19 @@ export class Service<U> /* implements IService<U> */ {
   ) {
     return this._model.findOneAndUpdate({ _id: id }, data, { upsert: true });
   }
+
+  async findMany(
+    filter: RootFilterQuery<U>,
+    pagination: { page: number; perPage: number } = { page: 1, perPage: 10 }
+  ) {
+    return {
+      data: await this._model.find(filter, null, {
+        skip: (pagination.page - 1) * pagination.perPage,
+        limit: pagination.perPage,
+      }),
+      currentPage: pagination.page,
+      perPage: pagination.perPage,
+      total: await this._model.countDocuments(filter)
+    };
+  }
 }
