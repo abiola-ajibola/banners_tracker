@@ -38,7 +38,7 @@ export async function getAllUsers(req: Request, res: Response) {
   const query = req.query;
   console.log({ query });
   const users = await userService.findMany(
-    {},
+    query.email ? {email: query.email}: {},
     {
       page: query.page ? +(query.page as string) : 1,
       perPage: query.perPage ? +(query.perPage as string) : 10,

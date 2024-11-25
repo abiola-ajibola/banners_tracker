@@ -153,7 +153,7 @@ export function Pagination({
           </PaginationItem>
         ) : null}
         <PaginationItem>
-          <PaginationNext disabled={currentPage === pages} onClick={onNext} />
+          <PaginationNext disabled={pages <= currentPage} onClick={onNext} />
         </PaginationItem>
       </PaginationContent>
     </PaginationNav>

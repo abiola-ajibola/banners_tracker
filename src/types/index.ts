@@ -61,3 +61,9 @@ export type NavProps = {
   links: NavLinkProps[];
   adminLinks: NavLinkProps[];
 };
+
+export type GetUsersQuery = {
+  page: number;
+  perPage: number;
+  email?: string;
+};

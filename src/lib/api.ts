@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IGeoCode, IUser, MapLocation, Position } from "../types";
+import { GetUsersQuery, IGeoCode, IUser, MapLocation, Position } from "../types";
 
 const api = axios.create({
   baseURL: "/",
@@ -16,10 +16,7 @@ export async function getMe() {
 }
 
 export async function getUsers(
-  query: {
-    page: number;
-    perPage: number;
-  } = {
+  query: GetUsersQuery = {
     page: 1,
     perPage: 10,
   }

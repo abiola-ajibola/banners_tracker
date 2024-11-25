@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { number, object } from "yup";
+import { number, object, string } from "yup";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
 const querySchema = object({
   page: number().nullable(),
   perPage: number().nullable(),
+  email: string().email("Invalid email address").nullable()
 });
 
 export const validateQuery = async (
