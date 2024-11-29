@@ -1,5 +1,12 @@
 import axios from "axios";
-import { GetUsersQuery, IGeoCode, IUser, MapLocation, Position } from "../types";
+import {
+  AllLocationsQuery,
+  GetUsersQuery,
+  IGeoCode,
+  IUser,
+  MapLocation,
+  Position,
+} from "../types";
 
 const api = axios.create({
   baseURL: "/",
@@ -44,6 +51,16 @@ export async function getLocations() {
   const { data, status } = await api.get<(MapLocation & { email: string })[]>(
     "/banner-locations"
   );
+  return { data, status };
+}
+
+export async function getAllLocations(query: AllLocationsQuery) {
+  const { data, status } = await api.get<{
+    data: (MapLocation & { email: string })[];
+    currentPage: number;
+    perPage: number;
+    total: number;
+  }>("/all-locations", { params: query });
   return { data, status };
 }
 

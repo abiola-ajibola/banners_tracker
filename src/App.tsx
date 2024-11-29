@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: <AdminHome links={adminLinks} /> },
           { path: "all-users", element: <AllUsers /> },
-          { path: "all-locations", element: <h1>All Locations</h1> },
+          { path: "all-locations", element: <AddedLocations isAdmin /> },
         ],
       },
       { path: "/location/:id", element: <AddLocation /> },

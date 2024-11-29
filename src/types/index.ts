@@ -67,3 +67,10 @@ export type GetUsersQuery = {
   perPage: number;
   email?: string;
 };
+
+export type AllLocationsQuery = {
+  page: number;
+  perPage: number;
+  userEmail?: string;
+  address?: string;
+};

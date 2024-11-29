@@ -3,6 +3,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import { db } from "./services/db/index";
 import {
+  validateAllLocationsQuery,
   validateAuth,
   validateLocation,
   validateOtp,
@@ -16,9 +17,9 @@ import {
   updateLocation,
   getUser,
   geolocation,
+  getAllLocations,
 } from "./controllers";
-import { isAuthorized } from "./middlewares/authorization/";
-import { isAdmin } from "./middlewares/authorization/";
+import { isAuthorized, isAdmin } from "./middlewares/authorization";
 import { getAllUsers } from "./controllers/user";
 
 const app = express();
@@ -52,6 +53,13 @@ app.get("/me", getUser);
 app.post("/auth", validateAuth, authenticate);
 app.put("/banner-location", isAuthorized, validateLocation, updateLocation);
 app.get("/banner-locations", isAuthorized, getLocations);
+app.get(
+  "/all-locations",
+  validateAllLocationsQuery,
+  isAuthorized,
+  isAdmin,
+  getAllLocations
+);
 app.get("/users", validateQuery, isAuthorized, isAdmin, getAllUsers);
 app.get("/geolocation", isAuthorized, geolocation);
 app.get("/auth/verify/:token", verifyEmail);
