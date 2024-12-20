@@ -62,7 +62,7 @@ jobs:
           workload_identity_provider: "projects/885024191475/locations/global/workloadIdentityPools/github/providers/my-repo" # your workload identity provider
 
       - name: "Build"
-        uses: "actions/setup-node@4"
+        uses: "actions/setup-node@v4"
         with:
           node-version: "22.11.0"
       - run: "echo VITE_GOOGLE_MAPS_API_KEY = ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }} >> .env"
