@@ -68,7 +68,9 @@ jobs:
       - run: "echo VITE_GOOGLE_MAPS_API_KEY = ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }} >> .env"
       - run: "echo VITE_MAP_ID = ${{ secrets.VITE_MAP_ID }} >> .env"
       - run: "yarn build:ci"
-      - run: "ls && cat .env"
+      - run: "ls output"
+      - run: "cp Dockerfile output"
+      - run: "ls -R output"
 
       - name: "Deploy to Cloud Run"
         uses: "google-github-actions/deploy-cloudrun@33553064113a37d688aa6937bacbdc481580be17" # google-github-actions/deploy-cloudrun@v2
