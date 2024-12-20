@@ -68,3 +68,21 @@ export async function getLocations(req: Request, res: Response) {
     }
   );
 }
+
+export async function getAllLocations(req: Request, res: Response) {
+  const query = req.query;
+  console.log({ query });
+  const filter: { email?: string; $text?: { $search: string } } = {};
+  if (query.userEmail) {
+    filter.email = query.userEmail as string;
+  }
+  if (query.address) {
+    filter.$text = { $search: query.address as string };
+  }
+  const locations = await locationService.findMany(filter, {
+    page: query.page ? +(query.page as string) : 1,
+    perPage: query.perPage ? +(query.perPage as string) : 10,
+  });
+  console.log({ locations });
+  res.status(StatusCodes.OK).json(locations);
+}

@@ -27,4 +27,6 @@ const locationSchema = new Schema<TMapLocation>(
   { timestamps: true }
 );
 
+locationSchema.index({address: "text"})
+
 export const MapLocation = model<TMapLocation>("MapLocation", locationSchema);

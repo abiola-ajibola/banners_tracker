@@ -3,9 +3,11 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import { db } from "./services/db/index";
 import {
+  validateAllLocationsQuery,
   validateAuth,
   validateLocation,
   validateOtp,
+  validateQuery,
 } from "./middlewares/validation";
 import {
   authenticate,
@@ -15,12 +17,14 @@ import {
   updateLocation,
   getUser,
   geolocation,
+  getAllLocations,
 } from "./controllers";
-import { isAuthorized } from "./middlewares/authorization";
+import { isAuthorized, isAdmin } from "./middlewares/authorization";
+import { getAllUsers } from "./controllers/user";
 
 const app = express();
 
-const { JWT_SECRET, DATABASE_URL, DB_NAME } = process.env;
+const { JWT_SECRET, DATABASE_URL, DB_NAME, NODE_ENV } = process.env;
 const PORT = process.env.PORT || 4000;
 
 if (!JWT_SECRET || !DATABASE_URL || !DB_NAME) {
@@ -29,7 +33,9 @@ if (!JWT_SECRET || !DATABASE_URL || !DB_NAME) {
 
 db.connect(DATABASE_URL);
 
-const root = path.resolve("../dist");
+const root = path.resolve(
+  NODE_ENV === "development" ? "../dist" : "./dist"
+);
 console.log({ root });
 const staticOptions = {
   dotfiles: "deny",
@@ -49,6 +55,14 @@ app.get("/me", getUser);
 app.post("/auth", validateAuth, authenticate);
 app.put("/banner-location", isAuthorized, validateLocation, updateLocation);
 app.get("/banner-locations", isAuthorized, getLocations);
+app.get(
+  "/all-locations",
+  validateAllLocationsQuery,
+  isAuthorized,
+  isAdmin,
+  getAllLocations
+);
+app.get("/users", validateQuery, isAuthorized, isAdmin, getAllUsers);
 app.get("/geolocation", isAuthorized, geolocation);
 app.get("/auth/verify/:token", verifyEmail);
 app.post("/auth/login/verify", validateOtp, verifyOTP);

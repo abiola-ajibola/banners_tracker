@@ -33,3 +33,17 @@ export async function getUser(req: Request, res: Response) {
       .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
   }
 }
+
+export async function getAllUsers(req: Request, res: Response) {
+  const query = req.query;
+  console.log({ query });
+  const users = await userService.findMany(
+    query.email ? {email: query.email}: {},
+    {
+      page: query.page ? +(query.page as string) : 1,
+      perPage: query.perPage ? +(query.perPage as string) : 10,
+    }
+  );
+  console.log({ users });
+  res.status(StatusCodes.OK).json(users);
+}

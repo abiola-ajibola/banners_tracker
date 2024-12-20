@@ -7,7 +7,7 @@ class UserService extends Service<IUser> {
   }
 
   async findByEmail(email: string) {
-    return await this._model.findOne({ email });
+    return await this._model.findOne({ email }).exec();
   }
 }
 

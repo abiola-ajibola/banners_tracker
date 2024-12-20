@@ -1,10 +1,13 @@
-import * as React from "react";
+import { forwardRef, InputHTMLAttributes, useRef } from "react";
+
+import { Button } from "../Button";
+import SearchIcon from "../../assets/search.svg?react";
 
 import { cn } from "../../lib/utils";
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     return (
       <input
@@ -22,3 +25,21 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = "Input";
 
 export { Input };
+
+export function SearchInput({
+  onSearch,
+  inputProps,
+}: {
+  onSearch: (value: string) => void;
+  inputProps?: InputProps;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  return (
+    <div className="flex w-full max-w-sm items-center space-x-2 mb-4">
+      <Input className="h-16" ref={inputRef} {...inputProps} />
+      <Button className="!w-[unset]" onClick={() => onSearch(inputRef.current?.value || "")} type="button">
+        <SearchIcon />
+      </Button>
+    </div>
+  );
+}
