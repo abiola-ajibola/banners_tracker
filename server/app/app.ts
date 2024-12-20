@@ -24,7 +24,7 @@ import { getAllUsers } from "./controllers/user";
 
 const app = express();
 
-const { JWT_SECRET, DATABASE_URL, DB_NAME } = process.env;
+const { JWT_SECRET, DATABASE_URL, DB_NAME, NODE_ENV } = process.env;
 const PORT = process.env.PORT || 4000;
 
 if (!JWT_SECRET || !DATABASE_URL || !DB_NAME) {
@@ -33,7 +33,9 @@ if (!JWT_SECRET || !DATABASE_URL || !DB_NAME) {
 
 db.connect(DATABASE_URL);
 
-const root = path.resolve("../dist");
+const root = path.resolve(
+  NODE_ENV === "development" ? "../dist" : "./dist"
+);
 console.log({ root });
 const staticOptions = {
   dotfiles: "deny",

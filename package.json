@@ -11,7 +11,7 @@
     "build": "tsc -b && vite build",
     "build:dirty": "vite build",
     "build:watch": "tsc -b && vite build --watch --mode development",
-    "build:all": "yarn build && yarn --cwd ./server build",
+    "build:all": "yarn build && yarn --cwd ./server bundle",
     "start:server": "yarn --cwd ./server start",
     "build:ci": "yarn --frozen-lockfile install && yarn --cwd ./server --frozen-lockfile install && yarn build:all",
     "lint": "eslint .",
