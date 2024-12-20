@@ -27,12 +27,30 @@
 #
 # 3. Change the values in the "env" block to match your values.
 
+# 4. Go to https://console.cloud.google.com/iam-admin/iam?inv=1&invt=AbkmbQ&orgonly=true&project=<project_id>&supportedpurview=organizationId
+#   - Add a new principal by clicking on Grant Access.
+#   - Add the principal created in step 2. The new pricipal should be in the format: principal://iam.googleapis.com/projects/<project_number>/locations/global/workloadIdentityPools/github/subject/repo:<name of github user or org>/<name of github repo>:ref:refs/heads/<branch name>.
+#     To find the project number, go to: https://console.cloud.google.com/iam-admin/settings?project=<project_id>
+#   - Add the following roles to the principal:
+#     - Artifact Registry Administrator (roles/artifactregistry.admin)
+#     - Cloud Run Source Developer (roles/run.sourceDeveloper)
+#     - Cloud Build Service Account (roles/cloudbuild.builds.builder)
+#     - Service Account User (roles/iam.serviceAccountUser)
+#     - Workload Identity User (roles/iam.workloadIdentityUser)
+#
+# 5. Enable uniform bucket-level access for the bucket used to upload your build artifacts:
+#    to do this, go to the cloud storage console, using this link (https://console.cloud.google.com/storage/browser/<project_id>_cloudbuild;tab=permissions?invt=AbkoYg&project=<project_id>&prefix=&forceOnObjectsSortingFiltering=false)
+#   then follow instructions on this page: https://cloud.google.com/storage/docs/using-uniform-bucket-level-access
+#   Then ensure the principal as used in step 4 is granted access with the following roles:
+#    - Cloud Build Service Account (roles/cloudbuild.builds.builder)
+#    - Cloud run source developer (roles/run.sourceDeveloper) 
+
 name: "Deploy to Cloud Run from Source"
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 env:
   PROJECT_ID: "people-api-test-414806" # Google Cloud project ID
@@ -68,9 +86,7 @@ jobs:
       - run: "echo VITE_GOOGLE_MAPS_API_KEY = ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }} >> .env"
       - run: "echo VITE_MAP_ID = ${{ secrets.VITE_MAP_ID }} >> .env"
       - run: "yarn build:ci"
-      - run: "ls output"
       - run: "cp Dockerfile output"
-      - run: "ls -R output"
 
       - name: "Deploy to Cloud Run"
         uses: "google-github-actions/deploy-cloudrun@33553064113a37d688aa6937bacbdc481580be17" # google-github-actions/deploy-cloudrun@v2
