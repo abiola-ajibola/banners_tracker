@@ -37,7 +37,7 @@ on:
 env:
   PROJECT_ID: "people-api-test-414806" # Google Cloud project ID
   REGION: "europe-west4" # your region
-  SERVICE: "run.googleapis.com" # your service name
+  SERVICE: "bannerstracker" # your service name
 
 jobs:
   deploy:
