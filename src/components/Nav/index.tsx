@@ -2,6 +2,8 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { buttonVariants } from "../Button/variants";
 import { NavLinkProps, NavProps } from "../../types";
 import { useUserDataContext } from "../../contexts/userData";
+import { useEffect } from "react";
+import { getMe } from "../../lib/api";
 
 function NavLink({ text, href }: NavLinkProps) {
   const location = useLocation();
@@ -19,8 +21,20 @@ function NavLink({ text, href }: NavLinkProps) {
 
 export function Nav({ links, adminLinks }: NavProps) {
   const location = useLocation();
-  const { data: userData } = useUserDataContext();
+  const { data: userData, setData } = useUserDataContext();  
   const isAdmin = userData.role === "admin";
+
+  useEffect(() => {
+    const runEffects = async () => {
+      const { data, status } = await getMe();
+      if (status == 200) {
+        setData(data);
+        return;
+      }
+    };
+    runEffects();
+  }, [setData]);
+
   return (
     <>
       <nav className="mb-4">
