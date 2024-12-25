@@ -24,11 +24,6 @@ export function Email(props: { expired?: boolean }) {
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setData((data) => ({
-      ...data,
-      email: e.target.value || "",
-      verified: false,
-    }));
     setEmailValid(e.target.validity.valid);
   };
 
@@ -39,13 +34,18 @@ export function Email(props: { expired?: boolean }) {
     const { data: user, status } = await auth(
       expired
         ? {
-            email: data.email,
+            email: inputRef.current?.value as string,
             reset: expired,
           }
-        : { email: data.email }
+        : { email: inputRef.current?.value as string }
     );
     if (status === 204) {
-      // setData(user);
+      setData({
+        _id: "",
+        role: "client",
+        email: user.email as string,
+        verified: false,
+      });
       navigate("/verify_message");
       return;
     }
@@ -70,7 +70,7 @@ export function Email(props: { expired?: boolean }) {
           id="email-input"
           className="text-xl h-12"
           onChange={handleChange}
-          value={data.email}
+          defaultValue={data.email}
           required
           type="email"
           placeholder="Email"
