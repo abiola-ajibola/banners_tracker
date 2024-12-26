@@ -28,9 +28,6 @@ export function AddLocation() {
   const { data: user } = useUserDataContext();
   const { toast } = useToast();
 
-  console.log({ map });
-  // const geocoder =
-
   const panSetPosition = useCallback(
     (position: Position) => {
       map?.panTo(position);
@@ -106,7 +103,12 @@ export function AddLocation() {
           )
         : [
             ...locations,
-            { _id: data._id, coords: center, image_url: imageSrc },
+            {
+              _id: data._id,
+              coords: center,
+              image_url: imageSrc,
+              address: geoData.results[0]?.formatted_address,
+            },
           ];
       setLocations(newLocations);
       toast({
