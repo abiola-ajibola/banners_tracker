@@ -9,6 +9,7 @@ const locationValidationSchema = object({
     lng: number().required("lng not present in coords"),
   }),
   image_url: string(),
+  description: string().nullable(),
 });
 
 const allLocationsQuerySchema = object({
@@ -16,6 +17,7 @@ const allLocationsQuerySchema = object({
   perPage: number().nullable(),
   email: string().email("Invalid email address").nullable(),
   address: string().nullable(),
+  description: string().nullable(),
 });
 
 export const validateLocation = async (

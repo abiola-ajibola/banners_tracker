@@ -6,6 +6,7 @@ export type TMapLocation = {
   image_url?: string;
   email: string;
   address?: string
+  description?: string
 };
 
 const locationSchema = new Schema<TMapLocation>(
@@ -23,6 +24,7 @@ const locationSchema = new Schema<TMapLocation>(
       required: true,
     },
     address: String,
+    description: String
   },
   { timestamps: true }
 );
