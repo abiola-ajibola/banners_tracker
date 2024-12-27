@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 // import { v4 as uuid } from "uuid";
 import { useLocationsContext } from "../../contexts/locations";
 import { GoogleMap, GoogleMapPin } from "../../components/GoogleMap";
@@ -27,6 +27,7 @@ export function AddLocation() {
   const map = useMap();
   const { data: user } = useUserDataContext();
   const { toast } = useToast();
+  const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
 
   const panSetPosition = useCallback(
     (position: Position) => {
@@ -80,12 +81,14 @@ export function AddLocation() {
             image_url: imageSrc,
             email: user.email,
             address: geoData.results[0]?.formatted_address || "",
+            description: descriptionRef.current?.value,
           }
         : {
             coords: center,
             image_url: imageSrc,
             email: user.email,
             address: geoData.results[0]?.formatted_address || "",
+            description: descriptionRef.current?.value,
           }
     );
 
@@ -156,6 +159,14 @@ export function AddLocation() {
           heading="Snap the banner"
           open={modalOpen}
           onClose={() => setModalOpen(false)}
+        />
+        <textarea
+          name="description"
+          placeholder="Description"
+          id="description"
+          rows={5}
+          ref={descriptionRef}
+          className="w-full p-2"
         />
         <Button title="Save data" type="button" onClick={handleSave}>
           <span>Save</span>

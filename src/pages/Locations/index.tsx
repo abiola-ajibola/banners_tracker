@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
 } from "../../components/Card";
@@ -20,18 +21,21 @@ function LocationCard({
   imageUrl,
   id,
   coords,
+  description,
   onDelete,
 }: {
   street?: string;
   imageUrl?: string;
   id: string;
   coords: Position;
+  description?: string;
   onDelete: (id: string) => void;
 }) {
   console.log({ coords });
   return (
     <Card className="gap-4 min-h-20 my-4">
       <CardHeader>{street}</CardHeader>
+      <CardDescription className="my-3">{description}</CardDescription>
       <CardContent>
         <img width={"100%"} src={imageUrl} alt={"banner " + street} />
       </CardContent>
@@ -132,7 +136,7 @@ export function AddedLocations({ isAdmin = false }: { isAdmin?: boolean }) {
         onSearch={(v) => handleSearch(v, "address")}
       />
       {results.map((location) => {
-        const { _id: id, coords, image_url } = location;
+        const { _id: id, coords, image_url, description, address } = location;
         console.log({ id, coords });
         return (
           <LocationCard
@@ -140,8 +144,9 @@ export function AddedLocations({ isAdmin = false }: { isAdmin?: boolean }) {
             id={id || ""}
             coords={coords}
             imageUrl={image_url}
-            street={location.address}
+            street={address}
             onDelete={handleDelete}
+            description={description}
           />
         );
       })}

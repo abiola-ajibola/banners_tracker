@@ -4,6 +4,7 @@ export type MapLocation = {
   coords: Position;
   image_url?: string;
   address?: string;
+  description?: string;
 };
 export interface IUser {
   _id: string;
