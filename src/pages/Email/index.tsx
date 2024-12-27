@@ -46,7 +46,6 @@ export function Email(props: { expired?: boolean }) {
         email: user.email as string,
         verified: false,
       });
-      navigate("/verify_message");
       return;
     }
     if (status === 200) {
@@ -54,6 +53,9 @@ export function Email(props: { expired?: boolean }) {
       navigate("/otp");
     }
 
+    if (status === 201) {
+      navigate("/verify_message");
+    }
     return;
   }
 
